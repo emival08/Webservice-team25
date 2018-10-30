@@ -1,5 +1,3 @@
-package examples;
-
 import org.json.JSONObject;
 
 import java.io.*;
@@ -7,41 +5,33 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class POSTExample {
+public class HTTPPost {
 
     public static void main(String[] args) {
-        POSTExample postExample = new POSTExample("104.248.47.74", 80);
-        postExample.post3RandomNumbers();
+        HTTPPost post = new HTTPPost("104.248.47.74", 80);
+        post.post3RandomNumbers();
     }
 
     private String BASE_URL; // Base URL (address) of the server
 
     /**
-     * Create an HTTP POST example
+     * Create an HTTP POST
      *
      * @param host Will send request to this host: IP address or domain
      * @param port Will use this port
      */
-    public POSTExample(String host, int port) {
+    public HTTPPost(String host, int port) {
         BASE_URL = "http://" + host + ":" + port + "/";
     }
 
     /**
-     * Post three random numbers to a specific path on the web server
+     * Post email and phone number to the web server.
      */
-    public void post3RandomNumbers() {
-        int a = (int) Math.round(Math.random() * 100);
-        int b = (int) Math.round(Math.random() * 100);
-        int c = (int) Math.round(Math.random() * 100);
-
-        JSONObject json = new JSONObject();
-        json.put("a", a);
-        json.put("b", b);
-        json.put("b", b);
-        System.out.println("Posting this JSON data to server");
-        System.out.println(json.toString());
-        // TODO: change path to something correct
-        sendPost("dkrest/test/post", json);
+    public void PostRegisteredInfo(){
+        String url = "dkrest/auth";
+        JSONObject jsonObject = new JSONObject();
+        String email
+        sendPost(url, );
     }
 
     /**
