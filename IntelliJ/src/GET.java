@@ -1,83 +1,77 @@
-import org.json.JSONObject;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
-public class HTTPPost {
+/**
+ * An example showing how to send HTTP GET and read the response from the server
+ */
+public class GET {
 
     public static void main(String[] args) {
-        HTTPPost post = new HTTPPost("104.248.47.74", 80);
-        post.logIn();
+        GET example = new GET("104.248.47.74", 80);
+        example.doExampleGet();
     }
 
     private String BASE_URL; // Base URL (address) of the server
 
     /**
-     * Create an HTTP POST
+     * Create an HTTP GET example
      *
      * @param host Will send request to this host: IP address or domain
      * @param port Will use this port
      */
-    public HTTPPost(String host, int port) {
+    public GET(String host, int port) {
         BASE_URL = "http://" + host + ":" + port + "/";
     }
 
     /**
-     * Post email and phone number to the web server.
+     * Send an HTTP GET to a specific path on the web server
      */
-    public void logIn(){
-        String url = "dkrest/auth";
-        String phone = "47806366";
-        String email = "emilva@stud.ntnu.no";
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("email", email);
-        jsonObject.put("phone", phone);
-        sendPost(url, jsonObject);
+    public void doExampleGet() {
+        sendGet("dkrest/test/get2");
     }
 
     /**
-     * Send HTTP POST
+     * Send HTTP GET
      *
      * @param path     Relative path in the API.
-     * @param jsonData The data in JSON format that will be posted to the server
      */
-    private void sendPost(String path, JSONObject jsonData) {
+    static String sendGet(String path) {
+        String returnValue;
+        String BASE_URL = "http://" + "104.248.47.74" + ":" + "80" + "/";
         try {
             String url = BASE_URL + path;
             URL urlObj = new URL(url);
-            System.out.println("Sending HTTP POST to " + url);
+            System.out.println("Sending HTTP GET to " + url);
             HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
 
-            con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setDoOutput(true);
-
-            OutputStream os = con.getOutputStream();
-            os.write(jsonData.toString().getBytes());
-            os.flush();
+            con.setRequestMethod("GET");
 
             int responseCode = con.getResponseCode();
             if (responseCode == 200) {
                 System.out.println("Server reached");
-
                 // Response was OK, read the body (data)
                 InputStream stream = con.getInputStream();
                 String responseBody = convertStreamToString(stream);
                 stream.close();
                 System.out.println("Response from the server:");
                 System.out.println(responseBody);
+                returnValue = responseBody;
             } else {
                 String responseDescription = con.getResponseMessage();
                 System.out.println("Request failed, response code: " + responseCode + " (" + responseDescription + ")");
+                returnValue = null;
             }
         } catch (ProtocolException e) {
-            System.out.println("Protocol nto supported by the server");
+            System.out.println("Protocol not supported by the server");
+            returnValue = null;
         } catch (IOException e) {
             System.out.println("Something went wrong: " + e.getMessage());
             e.printStackTrace();
+            returnValue = null;
         }
+        return returnValue;
     }
 
     /**
@@ -85,7 +79,7 @@ public class HTTPPost {
      * @param is Inputstream to read the body from
      * @return The whole body as a string
      */
-    private String convertStreamToString(InputStream is) {
+    private static String convertStreamToString(InputStream is) {
         BufferedReader in = new BufferedReader(new InputStreamReader(is));
         StringBuilder response = new StringBuilder();
         try {
