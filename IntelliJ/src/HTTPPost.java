@@ -9,7 +9,7 @@ public class HTTPPost {
 
     public static void main(String[] args) {
         HTTPPost post = new HTTPPost("104.248.47.74", 80);
-        post.post3RandomNumbers();
+        post.logIn();
     }
 
     private String BASE_URL; // Base URL (address) of the server
@@ -27,11 +27,14 @@ public class HTTPPost {
     /**
      * Post email and phone number to the web server.
      */
-    public void PostRegisteredInfo(){
+    public void logIn(){
         String url = "dkrest/auth";
+        String phone = "47806366";
+        String email = "emilva@stud.ntnu.no";
         JSONObject jsonObject = new JSONObject();
-        String email
-        sendPost(url, );
+        jsonObject.put("email", email);
+        jsonObject.put("phone", phone);
+        sendPost(url, jsonObject);
     }
 
     /**
